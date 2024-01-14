@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>文件翻译</title>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+</head>
+<body>
+<div class="container">
+    <h1>pdf翻译</h1>
+    <div class="upload-section">
+        <!--      <label for="file">上传pdf</label>-->
+        <input type="file" id="file" accept=".pdf,.md">
+        <!--      <span id="file-name"></span>-->
+        <!--      <button id="upload-btn">上传</button>-->
+    </div>
+    <div class="options-section">
+        <label for="file-format">目标文件格式：</label>
+        <select id="file-format">
+            <option value="pdf">PDF</option>
+            <option value="markdown">Markdown</option>
+        </select></div>
+    <div class="options-section">
+        <label for="target-language">目标语言：</label>
+        <select id="target-language">
+            <option value="中文">中文</option>
+            <option value="英文">英文</option>
+            <option value="法文">法文</option>
+            <option value="日文">日文</option>
+        </select>
+    </div>
+    <button id="translate-btn">翻译</button>
+    <span id="loading-spinner" class="hidden"></span>
+
+    <div id="result-section" class="hidden">
+        <h2>翻译结果：</h2>
+        <ul id="result-list"></ul>
+    </div>
+</div>
+<script src="api.js"></script>
+<script>
+    document.getElementById("file").addEventListener("change", function() {
+var fileName = this.files[0].name;
+document.getElementById("file-name").textContent = fileName;
+document.getElementById("upload-btn").textContent = "重新上传";
+});
+
+document.getElementById("translate-btn").addEventListener("click", function() {
+var file = document.getElementById("file").files[0];
+var fileFormat = document.getElementById("file-format").value;
+var targetLanguage = document.getElementById("target-language").value;
+
+var formData = new FormData();
+formData.append("file", file);
+formData.append("file_format", fileFormat);
+formData.append("target_language", targetLanguage);
+
+showLoadingSpinner();
+
+fetch(apiConfig.apiHost + apiConfig.translateApi, {
+  method: "POST",
+  body: formData
+})
+.then(function(response) {
+  return response.json();
+})
+.then(function(data) {
+  hideLoadingSpinner();
+  displayTranslationResult(data);
+})
+.catch(function(error) {
+  hideLoadingSpinner();
+  alert("翻译请求失败：" + error.message);
+});
+});
+
+function showLoadingSpinner() {
+document.getElementById("loading-spinner").classList.remove("hidden")
+}
+
+function hideLoadingSpinner() {
+document.getElementById("loading-spinner").style.visibility = "hidden";
+}
+
+function displayTranslationResult(result) {
+var resultList = document.getElementById("result-list");
+resultList.innerHTML = "";
+
+var originalFileName = result.originalFileName;
+var translatedFileName = result.translatedFileName;
+var fileFormat = document.getElementById("file-format").value;
+var targetLanguage = document.getElementById("target-language").value;
+var downloadUrl = apiConfig.downloadUrlprefix + result.output_file_path;
+
+
+
+fileItem = document.createElement("li");
+fileItem.style.listStyle = "none";
+fileItem.textContent = "目标文件格式： " + fileFormat;
+resultList.appendChild(fileItem);
+
+fileItem = document.createElement("li");
+fileItem.style.listStyle = "none";
+fileItem.textContent = "目标语言： " + targetLanguage;
+resultList.appendChild(fileItem);
+
+fileItem = document.createElement("li");
+fileItem.style.listStyle = "none";
+var downloadLink = document.createElement("a");
+downloadLink.href = downloadUrl;
+downloadLink.textContent = "下载结果文件";
+downloadLink.target = "_blank";
+fileItem.appendChild(downloadLink);
+resultList.appendChild(fileItem);
+
+document.getElementById("result-section").classList.remove("hidden");
+}
+</script>
+</body>
+</html>
