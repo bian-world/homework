@@ -1,0 +1,48 @@
+.container {
+  text-align: center;
+  margin-top: 100px;
+}
+
+h1 {
+  margin-bottom: 30px;
+  color: #333333;
+}
+
+.upload-section, .options-section {
+  margin-bottom: 20px;
+}
+
+.hidden {
+  display: none;
+}
+
+#loading-spinner {
+  margin-left: 10px;
+  visibility: hidden;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+#upload-btn, #translate-btn {
+  background-color: #007bff;
+  color: #ffffff;
+  border: none;
+  border-radius: 3px;
+  padding: 10px 20px;
+  cursor: pointer;
+  font-family: Arial, sans-serif;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+#upload-btn:hover, #translate-btn:hover {
+  background-color: #0056b3;
+}
+
+#translate-btn {
+  margin-left: 10px;
+}

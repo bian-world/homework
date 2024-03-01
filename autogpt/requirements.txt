@@ -1,0 +1,6 @@
+faiss_cpu==1.7.4
+gradio==4.19.2
+langchain==0.1.9
+langchain_community==0.0.24
+langchain_experimental==0.0.53
+langchain_openai==0.0.8

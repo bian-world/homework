@@ -1,0 +1,11 @@
+OpenAIModel:
+  model: "gpt-3.5-turbo"
+  api_key: "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"
+
+GLMModel:
+  model_url: "http://localhost:8000"
+  timeout: 3000
+
+common:
+  book: "/Users/zheng/ai/openai-quickstart/openai-translator/tests/test.pdf"
+  file_format: "pdf"
